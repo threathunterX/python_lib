@@ -1,0 +1,140 @@
+{
+  "status": 0,
+  "msg": "ok",
+  "values": [
+    {
+      "status": 0,
+      "remark": "",
+      "terms": {
+        "then": [
+          {
+            "tar_col": "sid",
+            "op_string": "323",
+            "src_col": "",
+            "op": "set"
+          }
+        ],
+        "when": [
+          {
+            "op_string": "123",
+            "src_col": "id",
+            "op": "!="
+          },
+          {
+            "op_string": "123333",
+            "src_col": "host",
+            "op": "=="
+          },
+          {
+            "op_string": "333",
+            "src_col": "uri_stem",
+            "op": "in"
+          }
+        ]
+      },
+      "url": "333",
+      "dest": "order_submit",
+      "source": "http_dynamic",
+      "host": "123333",
+      "id": 3
+    },
+    {
+      "status": 1,
+      "remark": "",
+      "terms": {
+        "then": [
+          {
+            "tar_col": "login_channel",
+            "op_string": "11",
+            "src_col": "",
+            "op": "set"
+          },
+          {
+            "tar_col": "remember_me",
+            "op_string": "f",
+            "src_col": "",
+            "op": "set"
+          },
+          {
+            "tar_col": "uid",
+            "op_string": [
+              {
+                "op_string": [
+                  {
+                    "op_string": "1",
+                    "src_col": "did",
+                    "op": "!contain"
+                  }
+                ],
+                "op_value": "1",
+                "src_col": "",
+                "op": ""
+              },
+              {
+                "op_value": "33",
+                "op": "default"
+              }
+            ],
+            "src_col": "",
+            "op": "switch"
+          }
+        ],
+        "when": [
+          {
+            "op_string": "POST",
+            "src_col": "method",
+            "op": "=="
+          },
+          {
+            "op_string": "kvcollect",
+            "src_col": "uri_stem",
+            "op": "contain"
+          }
+        ]
+      },
+      "url": "kvcollect",
+      "dest": "ACCOUNT_LOGIN",
+      "source": "HTTP_DYNAMIC",
+      "host": "",
+      "id": 4
+    },
+    {
+      "status": 0,
+      "remark": "",
+      "terms": {
+        "then": [
+          {
+            "tar_col": "pid",
+            "op_string": "3",
+            "src_col": "",
+            "op": "set"
+          }
+        ],
+        "when": [
+          {
+            "op_string": "123",
+            "src_col": "pid",
+            "op": "!="
+          },
+          {
+            "op_string": "333",
+            "src_col": "host",
+            "op": "!="
+          },
+          {
+            "op_string": "2222",
+            "src_col": "uri_stem",
+            "op": "=="
+          }
+        ]
+      },
+      "url": "2222",
+      "dest": "account_token_change",
+      "source": "http_static",
+      "host": "333",
+      "id": 1
+    }
+  ],
+  "count": 3,
+  "total_page": 1
+}

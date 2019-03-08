@@ -1,0 +1,7 @@
+#2019-01-14
+
+threathunter_common==1.1.1
+pytest==4.0.2
+pytest-cov==2.6.0
+requests==2.21.0
+setuptools==40.6.3

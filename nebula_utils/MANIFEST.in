@@ -1,0 +1,3 @@
+include requirements.txt
+recursive-include nebula_utils *.py
+recursive-include nebula_utils/persist_utils/bson *.py

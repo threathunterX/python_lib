@@ -1,0 +1,333 @@
+{
+  "status": "test",
+  "terms": [
+    {
+      "remark": "登录IP包含.",
+      "op": "contain",
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": "."
+        },
+        "type": "constant"
+      },
+      "left": {
+        "subtype": "",
+        "config": {
+          "field": "c_ip",
+          "event": [
+            "nebula",
+            "ACCOUNT_LOGIN"
+          ]
+        },
+        "type": "event"
+      },
+      "scope": "realtime"
+    },
+    {
+      "remark": "只有PC端",
+      "op": "!regex",
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": ".*(iphone|ipod|android|ios|phone|ipad).*"
+        },
+        "type": "constant"
+      },
+      "left": {
+        "subtype": "",
+        "config": {
+          "field": "useragent",
+          "event": [
+            "nebula",
+            "ACCOUNT_LOGIN"
+          ]
+        },
+        "type": "event"
+      },
+      "scope": "realtime"
+    },
+    {
+      "remark": "单IP5分钟内登录请求次数大于1",
+      "op": ">",
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": "1"
+        },
+        "type": "constant"
+      },
+      "left": {
+        "subtype": "getvariable",
+        "config": {
+          "variable": [
+            "nebula",
+            "ip__account_login_count__5m__rt"
+          ],
+          "trigger": {
+            "keys": [
+              "c_ip"
+            ],
+            "event": [
+              "nebula",
+              "ACCOUNT_LOGIN"
+            ]
+          }
+        },
+        "type": "func"
+      },
+      "scope": "realtime"
+    },
+    {
+      "remark": "单DID5分钟登录请求platform数大于1",
+      "op": "in",
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": "1"
+        },
+        "type": "constant"
+      },
+      "left": {
+        "subtype": "count",
+        "config": {
+          "algorithm": "count",
+          "interval": 300,
+          "sourceevent": [
+            "nebula",
+            "ACCOUNT_LOGIN"
+          ],
+          "trigger": {
+            "keys": ["did"],
+            "event": [
+              "nebula",
+              "ACCOUNT_LOGIN"
+            ]
+          },
+          "operand": ["platform"],
+          "groupby": [
+            "did"
+          ],
+          "condition": [
+            {
+              "right": "9,10",
+              "left": "platform",
+              "op": "in"
+            }
+          ]
+        },
+        "type": "func"
+      },
+      "scope": "realtime"
+    },
+    {
+      "remark": "单UID5分钟登录请求distinct platform数大于1",
+      "op": "in",
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": "1"
+        },
+        "type": "constant"
+      },
+      "left": {
+        "subtype": "count",
+        "config": {
+          "algorithm": "distinct",
+          "interval": 300,
+          "sourceevent": [
+            "nebula",
+            "ACCOUNT_LOGIN"
+          ],
+          "trigger": {
+            "keys": ["uid"],
+            "event": [
+              "nebula",
+              "ACCOUNT_LOGIN"
+            ]
+          },
+          "operand": ["platform"],
+          "groupby": [
+            "uid"
+          ],
+          "condition": [
+            {
+              "right": "9,10",
+              "left": "platform",
+              "op": "in"
+            }
+          ]
+        },
+        "type": "func"
+      },
+      "scope": "realtime"
+    },
+    {
+      "remark": "单IP5分钟登录请求platform数等于1",
+      "op": "in",
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": "1"
+        },
+        "type": "constant"
+      },
+      "left": {
+        "subtype": "count",
+        "config": {
+          "algorithm": "count",
+          "interval": 300,
+          "sourceevent": [
+            "nebula",
+            "ACCOUNT_LOGIN"
+          ],
+          "trigger": {
+            "keys": ["c_ip"],
+            "event": [
+              "nebula",
+              "ACCOUNT_LOGIN"
+            ]
+          },
+          "operand": ["platform"],
+          "groupby": [
+            "c_ip"
+          ],
+          "condition": [
+            {
+              "right": "9,10",
+              "left": "platform",
+              "op": "in"
+            }
+          ]
+        },
+        "type": "func"
+      },
+      "scope": "realtime"
+    },
+    {
+      "remark": "单IP5分钟动态资源访问量大于0",
+      "op": ">",
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": "0"
+        },
+        "type": "constant"
+      },
+      "left": {
+        "subtype": "getvariable",
+        "config": {
+          "variable": [
+            "nebula",
+            "ip__visit_dynamic_count__5m__rt"
+          ],
+          "trigger": {
+            "keys": [
+              "c_ip"
+            ],
+            "event": [
+              "nebula",
+              "ACCOUNT_LOGIN"
+            ]
+          }
+        },
+        "type": "func"
+      },
+      "scope": "realtime"
+    },
+    {
+      "remark": "单DID5分钟动态资源访问量占比大于0",
+      "op": ">",
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": "0"
+        },
+        "type": "constant"
+      },
+      "left": {
+        "subtype": "getvariable",
+        "config": {
+          "variable": [
+            "nebula",
+            "did__visit_dynamic_count__5m__rt"
+          ],
+          "trigger": {
+            "keys": [
+              "did"
+            ],
+            "event": [
+              "nebula",
+              "ACCOUNT_LOGIN"
+            ]
+          }
+        },
+        "type": "func"
+      },
+      "scope": "realtime"
+    },
+    {
+      "remark": "单个IP当日访问uid次数大于3",
+      "op": ">=",
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": "3"
+        },
+        "type": "constant"
+      },
+      "left": {
+        "subtype": "getvariable",
+        "config": {
+          "variable": [
+            "nebula",
+            "ip__visit_distinct_uid__1h__profile"
+          ],
+          "trigger": {
+            "keys": [
+              "c_ip"
+            ],
+            "event": [
+              "nebula",
+              "ACCOUNT_LOGIN"
+            ]
+          }
+        },
+        "type": "func"
+      },
+      "scope": "profile"
+    },
+    {
+      "remark": "setblacklist",
+      "op": "",
+      "right": null,
+      "left": {
+        "subtype": "setblacklist",
+        "config": {
+          "remark": "登录请求近期未加载静态资源，单独请求API(PC端)",
+          "name": "VISITOR",
+          "checktype": "IP",
+          "decision": "review",
+          "checkvalue": "c_ip",
+          "checkpoints": "",
+          "ttl": 300
+        },
+        "type": "func"
+      },
+      "scope": "profile"
+    }
+  ],
+  "tags": [],
+  "app": "nebula",
+  "starteffect": 1477966749449,
+  "endeffect": 1572574749523,
+  "modifytime": 1477967220964,
+  "score": 53,
+  "category": "ACCOUNT",
+  "remark": "登录请求近期未加载静态资源，单独请求API(PC端)",
+  "isLock": false,
+  "name": "策略",
+  "version": 1478057255585,
+  "createtime": 1477967220964,
+  "group_id": 3
+}

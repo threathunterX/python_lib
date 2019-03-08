@@ -1,0 +1,8 @@
+#2019-01-14
+
+PyYAML==3.13
+threathunter_common==1.1.1
+mock==2.0.0
+pytest==4.0.2
+pytest-cov==2.6.0
+pylint==1.9.4

@@ -1,0 +1,91 @@
+{
+  "status": "test",
+  "terms": [
+    {
+      "remark": "登录IP包含.",
+      "op": "contain",
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": "."
+        },
+        "type": "constant"
+      },
+      "left": {
+        "subtype": "",
+        "config": {
+          "field": "c_ip",
+          "event": [
+            "nebula",
+            "ACCOUNT_LOGIN"
+          ]
+        },
+        "type": "event"
+      },
+      "scope": "realtime"
+    },
+    {
+      "remark": "单IP5分钟内登录请求次数大于1",
+      "op": "!=",
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": "T"
+        },
+        "type": "constant"
+      },
+      "left": {
+        "subtype": "getvariable",
+        "config": {
+          "variable": [
+            "nebula",
+            "__inner__check_black"
+          ],
+          "trigger": {
+            "keys": [
+              "c_ip"
+            ],
+            "event": [
+              "nebula",
+              "ACCOUNT_LOGIN"
+            ]
+          }
+        },
+        "type": "func"
+      },
+      "scope": "realtime"
+    },
+    {
+      "remark": "setblacklist",
+      "op": "",
+      "right": null,
+      "left": {
+        "subtype": "setblacklist",
+        "config": {
+          "remark": "登录请求近期未加载静态资源，单独请求API(PC端)",
+          "name": "VISITOR",
+          "checktype": "IP",
+          "decision": "review",
+          "checkvalue": "c_ip",
+          "checkpoints": "",
+          "ttl": 300
+        },
+        "type": "func"
+      },
+      "scope": "profile"
+    }
+  ],
+  "tags": [],
+  "app": "nebula",
+  "starteffect": 1477966749449,
+  "endeffect": 1572574749523,
+  "modifytime": 1477967220964,
+  "score": 53,
+  "category": "ACCOUNT",
+  "remark": "登录请求近期未加载静态资源，单独请求API(PC端)",
+  "isLock": false,
+  "name": "策略",
+  "version": 1478057255585,
+  "createtime": 1477967220964,
+  "group_id": 3
+}

@@ -1,0 +1,8 @@
+#2019-01-14
+
+mmh3==2.5.1
+plyvel==1.0.5
+redis==2.10.6
+pytest==4.0.2
+pytest-cov==2.6.0
+pylint==1.9.4

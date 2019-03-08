@@ -1,0 +1,9 @@
+#2019-01-14
+
+threathunter_common==1.1.1
+pytest==4.0.2
+pytest-cov==2.6.0
+setuptools==40.6.3
+requests==2.21.0
+nebula_meta==1.1.1
+pylint==1.9.4

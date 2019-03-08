@@ -1,0 +1,5 @@
+include README.md
+recursive-include *
+recursive-exclude loader *.pyc
+recursive-exclude parser *.pyo
+recursive-exclude tests *.pyo

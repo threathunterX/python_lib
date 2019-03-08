@@ -1,0 +1,103 @@
+{
+  "app": "nebula",
+  "tags": [
+    "interval"
+  ],
+  "category": "VISITOR",
+  "createtime": 0,
+  "endeffect": 7571453381455,
+  "modifytime": 0,
+  "name": "interval_测试1",
+  "remark": "",
+  "starteffect": 1514290676291,
+  "status": "inedit",
+  "terms": [
+    {
+      "remark": "",
+      "op": "contain",
+      "left": {
+        "subtype": "",
+        "config": {
+          "field": "c_ip",
+          "event": [
+            "nebula",
+            "ACCOUNT_LOGIN"
+          ]
+        },
+        "type": "event"
+      },
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": "."
+        },
+        "type": "constant"
+      }
+    },
+    {
+      "left": {
+        "subtype": "count",
+        "config": {
+          "algorithm": "interval",
+          "interval": 300,
+          "sourceevent": [
+            "nebula",
+            "HTTP_DYNAMIC"
+          ],
+          "trigger": {
+            "keys": [],
+            "event": [
+              "nebula",
+              "ACCOUNT_LOGIN"
+            ]
+          },
+          "operand": [
+            "did"
+          ],
+          "groupby": [
+            "did",
+            "page"
+          ],
+          "condition": [
+            {
+              "left": "did",
+              "right": "did",
+              "op": "="
+            },
+            {
+              "left": "page",
+              "op": "contain",
+              "right": "captcha"
+            }
+          ]
+        },
+        "type": "func"
+      },
+      "right": {
+        "subtype": "",
+        "config": {
+          "value": "2000"
+        },
+        "type": "constant"
+      },
+      "op": "<"
+    },
+    {
+      "remark": "",
+      "op": "",
+      "left": {
+        "subtype": "setblacklist",
+        "config": {
+          "checkpoints": "",
+          "checktype": "DeviceID",
+          "checkvalue": "did",
+          "decision": "review",
+          "name": "VISITOR",
+          "remark": "33",
+          "ttl": 10800
+        },
+        "type": "func"
+      }
+    }
+  ]
+}

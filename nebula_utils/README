@@ -1,0 +1,33 @@
+python包安装了nebula_utils包之后会提供以下脚本命令，进入安装的目录可以直接使用
+
+以下脚本的都可以在安装的virtualenv的bin目录下找到, 安装时自动从nebula_utils里面移过去。
+
+- 巡检脚本 cron_inspect.py
+
+```shell
+Usage:
+    cron_inspect.py [options] [args]
+Options:
+    --check_history [duration]: 检查时间范围内的数据统计的正确性.
+    ex. --check_history 1d 检查今天(当前小时之前)的统计是否运行没错
+        --check_history 1m 检查今天之前一个月的统计是否运行没错
+        --check_history 1w 检查今天之前一个星期的统计是否运行没错
+        --check_history 5h 检查之前5个小时的统计是否运行没错
+        --check_history 检查上个小时的统计
+    --rerun_history [duration]: 检查时间范围内的数据统计的正确性,并重新统计有问题的目录, 如果客户流量较大或者检查时间范围较大，可能会耗时较久
+    --rerun [db_path db_path1 ...] : 默认检查上个小时的统计，如果有错就重新跑； 也可以指定数据文件地址
+```
+
+(cron job, 默认每个小时会检查上3个小时的统计是否正常完成，非正常完成会重跑一次)
+
+- 每小时定时统计脚本 nebula_compute.py
+
+统计上个小时的日志(cron job, 每个小时第二分钟统计上个小时日志)
+
+- 测试的统计脚本 nebula_test.py
+
+之前跑多个小时、或者指定小时日志目录的统计, 现在功能已经被巡检脚本代替.
+
+- 清理过期日志脚本 nebula_clean.py
+
+根据/etc/nebula/nebula.conf 全局配置的 persist_expire_days 项来清理过期日志.(cron job, 默认每天凌晨清理过期日志)

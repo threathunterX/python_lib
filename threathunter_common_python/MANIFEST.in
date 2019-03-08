@@ -1,0 +1,6 @@
+recursive-include threathunter_common/ *.py
+recursive-include threathunter_common/ *.dat
+recursive-include threathunter_common/geo *.dat
+recursive-include threathunter_common/geo *.yml
+recursive-include threathunter_common/geo *.txt
+recursive-include threathunter_common/bankcard_info *.csv
