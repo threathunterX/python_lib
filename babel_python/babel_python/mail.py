@@ -144,9 +144,10 @@ class Mail(object):
     @staticmethod
     def from_json(json_str):
         try:
-            data = json.loads(text(json_str))
+            data = json.loads(unicode(json_str))
         except Exception as err:
             print "meet error {} while decode {}".format(err, json_str)
+            return None
 
         # body: base64 --> bytearray
         body = data["body"]

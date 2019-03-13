@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-import sys, logging
+import sys, logging, time
 
 if 'threading' in sys.modules:
     del sys.modules['threading']
@@ -32,6 +32,9 @@ class RequestCache(object):
     def clear_request(self, requestid):
         if requestid in self.cache:
             del self.cache[requestid]
+    
+    def has_request(self, requestid):
+        return self.cache.has_key(requestid)
 
     def add_request(self, requestid, latch):
         self.cache[requestid] = (requestid, latch, list())
@@ -47,6 +50,9 @@ class RequestCache(object):
         receivedEvents.append(response)
         latch.countdown()
 
+# Timeout requests
+# requestid: count
+TimeoutRequestCount = dict()
 
 class ServiceClient(object):
 
@@ -72,8 +78,12 @@ class ServiceClient(object):
             if service_meta.serverimpl == "rabbitmq":
                 from . import babelrabbitmq_async
                 self.impl = babelrabbitmq_async
+                from .kombu import Empty
+                self.Empty = Empty
             elif service_meta.serverimpl == "redis":
                 from . import babelredis_async
+                from gevent.queue import Empty
+                self.Empty = Empty
                 self.impl = babelredis_async
             else:
                 raise RuntimeError("serverimpl {} not implemented yet".format(service_meta.serverimpl))
@@ -117,7 +127,8 @@ class ServiceClient(object):
             self.batch_cache = list()
         except Exception,e:
             if self.raise_if_connect_error:
-                raise RuntimeError('babel connect error')
+                import traceback
+                raise RuntimeError('babel connect error: %s' % traceback.format_exc())
 
     def gen_next_requestid(self):
         while True:
@@ -129,7 +140,7 @@ class ServiceClient(object):
     def start(self):
         if self._receiver:
             self._receiver.start_consuming()
-            self.response_task = gevent.spawn(self.process_mails)
+#            self.response_task = gevent.spawn(self.process_mails)
 
     def close(self):
         self.running = False
@@ -138,15 +149,15 @@ class ServiceClient(object):
             self._sender.close()
             self._sender = None
 
-        if self.response_task:
-            self.response_task.join()
-            self.response_task = None
+#        if self.response_task:
+#            self.response_task.join()
+#            self.response_task = None
 
         if self._receiver:
             self._receiver.close()
             self._receiver = None
 
-    def send(self, request, key, block=True, timeout=10, expire=None):
+    def send(self, request, key, block=True, timeout=10, expire=None, least_ret=None):
         if not self.running:
             if self.raise_if_connect_error:
                 raise RuntimeError("the service client is closed or not connected")
@@ -155,7 +166,7 @@ class ServiceClient(object):
 
         client_process_start = millis_now()
         try:
-            result = self._send(request, key, block, timeout, expire)
+            result = self._send(request, key, block, timeout, expire, least_ret)
         except Exception as err:
             tags = {"type": "unknown"}
             tags.update(self.metrics_tags)
@@ -180,7 +191,7 @@ class ServiceClient(object):
             ServiceClient.send_metrics.record(1, tags)
             return result
 
-    def _send(self, request, key, block=True, timeout=10, expire=None):
+    def _send(self, request, key, block=True, timeout=10, expire=None, least_ret=None):
         # expire time calc
         if expire is None:
             expire = millis_now() + int(timeout * 1000)
@@ -217,8 +228,12 @@ class ServiceClient(object):
             countOfReplies = self.service_meta.options.get("servercardinality", 1)
 
         if countOfReplies > 0:
-            latch = CountDownLatch(value=countOfReplies)
+            if least_ret:
+                latch = CountDownLatch(value=least_ret)
+            else:
+                latch = CountDownLatch(value=countOfReplies)
             self.request_cache.add_request(requestid, latch)
+        logger.debug("Service: %s request once[%s]" % (self.service_meta.name, requestid))
 
         try:
             block = False
@@ -245,8 +260,14 @@ class ServiceClient(object):
 
         success = False
         try:
+            gs = [ gevent.spawn(self.process_mail_job, timeout, requestid)
+                   for _ in xrange(latch.value)]
+            gevent.joinall(gs, timeout=timeout, count=latch.value, raise_error=True)
             success = latch.wait(True, timeout)
         finally:
+            if any(not _.dead for _ in gs):
+                logger.debug("=============== Kill undead process mail jobs.")
+                gevent.killall(gs, exception=gevent.GreenletExit, block=False)
             after_recv_response = millis_now()
             tags = {"type": "receiveresponse"}
             tags.update(self.metrics_tags)
@@ -254,7 +275,8 @@ class ServiceClient(object):
             ServiceClient.cost_avg_metrics.record(cost, tags)
             ServiceClient.cost_max_metrics.record(cost, tags)
             ServiceClient.cost_min_metrics.record(cost, tags)
-
+            
+        # timeout flag switch to if request cache is None or len == 0
         if not success:
             tags = {"type": "timeout"}
             tags.update(self.metrics_tags)
@@ -285,6 +307,51 @@ class ServiceClient(object):
         else:
             return success, receivedEvents
 
+    def process_mail_job(self, timeout, requestid):
+        if not self._receiver:
+            logger.error("Serivce Client have not receiver, can't spawn fetch job") # @todo info about service client name
+            return
+#        with gevent.Timeout(timeout):
+        st = time.time()
+        while True:
+            try:
+                content = self._receiver.get(True, 1)
+                if not content:
+                    continue
+                response_mail = Mail.from_json(content)
+                if not response_mail:
+                    continue
+                get_requestid = response_mail.requestid
+                
+                try:
+                    response = extract_data_from_mail(response_mail)
+                except Exception as err:
+                    import traceback
+                    logger.debug("Error when parse output response: %s" % traceback.format_exc())
+                    response = err
+                if response:
+                    logger.debug("Output response for request[%s]" % requestid)
+                
+                # 拿到已经超时的请求, 就不会放入request_cache， 因为已经被clear了.
+                if self.request_cache.has_request(get_requestid):
+                    self.request_cache.add_response(get_requestid, response)
+
+                if get_requestid == requestid:
+                    # 同一个service同时两个请求，拿到对方的返回, 自己继续
+                    # 只有当拿到一个指定requestid的返回的时候才正常退出
+                    break
+            except self.Empty:
+                if not self.request_cache.has_request(requestid):
+                    logger.debug("request id[%s] fetch job timeout, because request cache cleared." % requestid)
+                    return
+                if time.time() - st >= timeout:
+                    logger.debug("request id[%s] fetch job timeout." % requestid)
+                    return
+                logger.debug("request id[%s] continue." % requestid)
+            except gevent.GreenletExit:
+                logger.debug("request id[%s] timeout,job been killed" % requestid)
+                return
+        
     def process_mails(self):
         if not self._receiver:
             return
@@ -293,23 +360,28 @@ class ServiceClient(object):
             try:
                 content = self._receiver.get(True, 1)
                 self.process_mail(content)
-            except gevent.queue.Empty:
+            except self.Empty:
                 pass
 
         self._receiver.close()
-        for content in self._receiver.dump_cache():
-            self.process_mail(content)
+#        for content in self._receiver.dump_cache():
+#            self.process_mail(content)
 
     def process_mail(self, mail_injson):
         if not mail_injson:
             return
+#        logger.debug("Input: %s" % mail_injson)
         response_mail = Mail.from_json(mail_injson)
+#        logger.debug("parse mail out: %s" % response_mail)
         requestid = response_mail.requestid
         try:
             response = extract_data_from_mail(response_mail)
         except Exception as err:
+            import traceback
+            logger.debug("Error when parse output response: %s" % traceback.format_exc())
             response = err
-
+        if response:
+            logger.debug("Output response for request[%s]" % requestid)
         self.request_cache.add_response(requestid, response)
 
     # useful handlers

@@ -122,9 +122,11 @@ class RedisListReceiver(RedisList):
                 self.cache.put(msg[1], timeout=10)
             except gevent.queue.Full:
                 self.full_errors += 1
-            except Exception as err:
-                print err
-                gevent.sleep(1)
+            except Exception:
+                import traceback
+                logging.error(traceback.format_exc())
+            finally:
+                gevent.sleep(0.5)
 
     def get_errors_due_to_queue_full(self):
         return self.full_errors
@@ -195,6 +197,9 @@ class RedisPubSubReceiver(RedisPubSub):
 
     def start_consuming(self):
         self.running = True
+        r = RedisCtx.get_instance().redis
+        self.pubsub = r.pubsub()
+        self.pubsub.subscribe(self.name)
         latch = CountDownLatch()
         self.consume_task = gevent.spawn(self.consume_task, latch)
         latch.wait()
@@ -203,25 +208,27 @@ class RedisPubSubReceiver(RedisPubSub):
         self.running = False
         if self.pubsub:
             self.pubsub.unsubscribe(self.name)
+            self.pubsub.close()
             self.pubsub = None
         self.consume_task.join()
 
     def consume_task(self, latch):
         while self.running:
             try:
-                r = RedisCtx.get_instance().redis
-                self.pubsub = r.pubsub()
-                self.pubsub.subscribe(self.name)
-                for item in self.pubsub.listen():
-                    if item["type"] == "subscribe":
+                message = self.pubsub.get_message()
+                if message:
+                    logging.debug("get message %s from channel(%s) at %s" % (message, self.name, time.time()))
+                    if message["type"] == "subscribe":
                         latch.countdown()
-                    elif item["type"] == "message":
+                    elif message["type"] == "message":
                         try:
-                            self.cache.put(item["data"], timeout=10)
+                            self.cache.put(message["data"], timeout=10)
                         except gevent.queue.Full:
                             self.full_errors += 1
-            except Exception as err:
-                print err
+                gevent.sleep(0.001)
+            except Exception:
+                import traceback
+                logging.error(traceback.format_exc())
 
     def get_errors_due_to_queue_full(self):
         return self.full_errors

@@ -21,8 +21,8 @@ def recover_connect(func):
         try:
             return func(self, *args, **kwargs)
         except ConnectionError as e:
-            logger.error("Pro")
             logging.error('RabbitMQ error: %r, reconnect.', e)
+            self.reconnect()
             return func(self, *args, **kwargs)
     return wrap
 
@@ -41,8 +41,8 @@ def debug_message(msg):
     logger.debug('Received message: %r dir: %s',msg, dir(msg))
     logger.debug('  properties:\n %s', pretty(msg.properties))
     logger.debug('  delivery_info:\n %s', pretty(msg.delivery_info))
-    logger.debug("  body:\n %s", pretty(msg.body if isinstance(msg.body, buffer) else str(msg.body)))
-    logger.debug("  payload:\n %s", pretty(msg.payload if isinstance(msg.payload, buffer) else str(msg.payload)))
+    logger.debug("  body:\n %s", pretty(msg.body if not isinstance(msg.body, buffer) else str(msg.body)))
+    logger.debug("  payload:\n %s", pretty(msg.payload if not isinstance(msg.payload, buffer) else str(msg.payload)))
     
 def connection_closed():
     global connection
@@ -57,13 +57,14 @@ def get_connection(amqp_url, heartbeat=60.0):
     if connection:
         if connection.connected:
             return connection
-        else:
-            # block whole process?
-            # connectied first then close rabbitmq, then test if block, then start rabbitmq, then test if recover
-            return connection.ensure_connection(
-                errback=connection_ensure_fail,
-                max_retries=3)
-
+#        else:
+#            # block whole process?
+#            # connectied first then close rabbitmq, then test if block, then start rabbitmq, then test if recover
+#            return connection.ensure_connection(
+#                errback=connection_ensure_fail,
+#                max_retries=3)
+            
+    logger.debug("Babel connect amqp_url: %s, try heartbeat: %s", amqp_url, heartbeat)
     if LOCAL_DEBUG:
         connection = Connection(amqp_url, heartbeat=heartbeat, transport="memory")
     else:
@@ -71,7 +72,8 @@ def get_connection(amqp_url, heartbeat=60.0):
     if logger.level <= logging.DEBUG:
         connection._logger = True
     
-    connection.connect()
+#    connection.connect()
+    connection.ensure_connection(errback=lambda exc,interval: logger.debug("Connect exception: %s, will sleep :%s s", exc, interval), max_retries=10, callback=lambda: logger.debug("retry once..."))
     logger.debug("Babel connection Info: %s" % connection.info())
     if connection.transport_cls == "amqp" and supports_librabbitmq():
         logger.debug("Babel transport way is %s", "librabbitmq")
@@ -138,7 +140,8 @@ class KombuMessageQueue(object):
         global connection
         if connection.connected:
             connection.close()
-        get_connection()
+        self._connect()
+#        get_connection(self.amqp_url)
 
     def connect(self):
         self._connect()
@@ -251,6 +254,7 @@ class KombuQueueSender(KombuMessageQueue):
                          eid=id(exchange), exchange=exchange, rk=routing_key, msg=message,
                          info=exception))
 
+    @recover_connect
     def put(self, obj, routing_key, durable=False, block=True, timeout=None):
         # @totest
 #        immediate = False
@@ -271,6 +275,7 @@ class KombuQueueSender(KombuMessageQueue):
             except Exception:
                 logger.error("Producer publish exception:%s, routing_key:%s , cause: %s" % (producer, routing_key, traceback.format_exc()))
 
+    @recover_connect
     def put_nowait(self, obj, routing_key, durable=False):
         self.put(obj, routing_key, durable, block=False)
 
@@ -290,39 +295,42 @@ class KombuQueueReceiver(KombuMessageQueue):
         pass
 
     def dump_cache(self):
-        self.queue_obj.clear()
+        return self.queue_obj.clear()
 
     def stop_consuming(self):
         self.queue_obj.close()
 
+    @recover_connect
     def get_cached_number(self):
         return self.queue_obj.qsize()
 
+    @recover_connect
     def get_nowait(self):
         try:
             log_message = self.queue_obj.get_nowait()
         except Empty:
             return None
         log_message.ack()
-        p = log_message.payload # deserialized data.        
-        if isinstance(p, buffer):
-            p = unicode(p)
-        return p
+#        p = log_message.payload # deserialized data.        
+#        if isinstance(p, buffer):
+#            p = unicode(p)
+        return log_message.body
 
+    @recover_connect
     def get(self, block=True, timeout=None):
-        logger.debug("Enter Message get callback method..")
+#        logger.debug("Enter Message get callback method..")
         try:
-            log_message = self.queue_obj.get(block=True, timeout=1)
+            log_message = self.queue_obj.get(block=True, timeout=timeout)
 #            logger.debug("get return : %s, dir: %s, type: %s", log_message, dir(log_message), type(log_message))
             debug_message(log_message)
         except Empty:
-            logger.error("Empty error when get @todo infos..")
-            return
-        p = log_message.payload # deserialized data.
+            logger.debug("Empty error when get @todo infos..")
+            raise Empty("{cn}[{id:#x}] is raise Empty when fetch.")
+#        p = log_message.payload # deserialized data.
         log_message.ack() # remove message from queue        
-        if isinstance(p, buffer):
-            p = unicode(p)
-        return p
+#        if isinstance(p, buffer):
+#            p = unicode(p)
+        return log_message.body
 
     def __del__(self):
         if not self.closed:
