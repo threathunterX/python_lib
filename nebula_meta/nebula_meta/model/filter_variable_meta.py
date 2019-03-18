@@ -9,7 +9,7 @@ from ..property_condition import PropertyCondition
 from ..property_mapping import PropertyMapping, DirectPropertyMapping
 
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class FilterVariableMeta(VariableMeta):

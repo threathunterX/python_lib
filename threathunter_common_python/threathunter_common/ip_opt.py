@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'wxt'
+__author__ = "nebula"
 
 import urllib2,os
 import json,struct,socket

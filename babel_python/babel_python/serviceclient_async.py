@@ -20,7 +20,7 @@ from threathunter_common.metrics.metricsrecorder import MetricsRecorder
 from threathunter_common.event import Event
 
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 logger = logging.getLogger('babel_python.service_client_async')
 

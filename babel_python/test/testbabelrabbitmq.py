@@ -6,7 +6,7 @@ from babel_python.servicemeta import ServiceMeta
 from babel_python.babelrabbitmq import *
 from babel_python.util import millis_now
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def sleep(timeout):

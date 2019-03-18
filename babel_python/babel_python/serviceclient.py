@@ -34,7 +34,7 @@ except ImportError:
                 return False
 
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class RequestCache(object):

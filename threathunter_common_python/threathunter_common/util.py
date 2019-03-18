@@ -21,7 +21,7 @@ from six import iteritems
 
 logger = logging.getLogger('threathunter_common.util')
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 md5string = lambda x: hashlib.md5(utf8(x)).hexdigest()
 

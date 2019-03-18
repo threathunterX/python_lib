@@ -9,7 +9,7 @@ from .util import text, unicode_obj
 from .property_mapping import ConstantPropertyMapping, DirectPropertyMapping, ConcatPropertyMapping
 
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 variable_meta_registry = dict()
 

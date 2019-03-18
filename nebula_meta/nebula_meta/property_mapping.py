@@ -7,7 +7,7 @@ import json
 from .property import Property
 from threathunter_common.util import text
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class PropertyMapping(object):

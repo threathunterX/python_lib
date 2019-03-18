@@ -5,7 +5,7 @@ import json
 
 from .util import text, unicode_dict, unicode_obj
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class ServiceMeta(object):

@@ -5,7 +5,7 @@ from __future__ import absolute_import
 import json
 from .util import text, unicode_dict
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 class Event(object):
     def __init__(self, app, name, key, timestamp, property_values, value=1.0):

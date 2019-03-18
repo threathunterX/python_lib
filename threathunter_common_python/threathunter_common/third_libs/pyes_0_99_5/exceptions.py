@@ -3,7 +3,7 @@
 
 from .utils import EqualityComparableUsingAttributeDictionary
 
-__author__ = 'Alberto Paro'
+__author__ = "nebula"
 
 __all__ = [
     'ESPendingDeprecationWarning',

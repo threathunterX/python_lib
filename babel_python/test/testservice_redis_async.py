@@ -6,7 +6,7 @@ from babel_python.serviceclient_async import *
 from threathunter_common.event import Event
 import time
 
-__author__ = 'luwen'
+__author__ = "nebula"
 
 
 def sleep(timeout):

@@ -7,7 +7,7 @@ from threathunter_common.metrics.influxdbproxy import _extract_metrics_params, g
 from threathunter_common.metrics.metricsagent import MetricsAgent
 from threathunter_common.metrics.redismetrics import RedisMetrics
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def test_extract_params():

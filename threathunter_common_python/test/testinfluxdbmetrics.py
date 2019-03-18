@@ -3,7 +3,7 @@
 from threathunter_common.metrics.influxdbmetrics import InfluxdbMetrics
 from threathunter_common.util import millis_now
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def extract_map_from_legend_map(data):

@@ -7,7 +7,7 @@ from babel_python.babelredis_async import *
 from babel_python.util import millis_now
 from threathunter_common.redis.redisctx import RedisCtx
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def sleep(timeout):

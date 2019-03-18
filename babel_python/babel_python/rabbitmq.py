@@ -14,7 +14,7 @@ import pika.exceptions
 from threathunter_common.rabbitmq.rmqctx import RabbitmqCtx
 from threathunter_common.util import run_in_thread
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 catch_error = 0
 def catch_error(func):

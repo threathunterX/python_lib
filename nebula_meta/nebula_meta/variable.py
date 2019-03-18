@@ -6,7 +6,7 @@ import json
 
 from .util import text, unicode_dict
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 class Variable(object):
     def __init__(self, app, name, key, timestamp, value, property_values):

@@ -6,7 +6,7 @@ from threathunter_common.eventmeta import EventMeta
 from threathunter_common.property import Property
 from threathunter_common.variable import Variable
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def test_eventmeta():

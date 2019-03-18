@@ -6,7 +6,7 @@ import six, json
 from ..util import text, millis_now,  unicode_list
 from .term import Term
 
-__author__ = '#USER'
+__author__ = "nebula"
 
 class Strategy(object):
     status_list = ["inedit", "test", "online", "outline"]

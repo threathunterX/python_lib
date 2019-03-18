@@ -7,7 +7,7 @@ from .SSDB import SSDB
 from .util import curr_timestamp
 from .ip_opt import Ip
 
-__author__ = 'wxt'
+__author__ = "nebula"
 
 #share
 class IpRiskRepoDAO:

@@ -12,7 +12,7 @@ from sqlalchemy.types import CHAR, String, Text
 from .util import utf8, text
 from .util import curr_timestamp,mobile_match
 
-__author__ = 'wxt'
+__author__ = "nebula"
 
 if six.PY3:
     where_type = utf8

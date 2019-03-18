@@ -16,7 +16,7 @@ try:
 except ImportError:
     mmap = None
 
-__author__ = 'lw'
+__author__ = "nebula"
 __all__ = ['IPv4Database', 'find']
 
 _unpack_L = lambda b: struct.unpack("<L", b)[0]

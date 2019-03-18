@@ -64,7 +64,7 @@ except ImportError:
             else:
                 return self.value < a
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class RPCClient(object):

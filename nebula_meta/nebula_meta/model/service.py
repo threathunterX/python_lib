@@ -5,7 +5,7 @@ import json
 from threathunter_common.eventmeta import EventMeta
 from ..util import text
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 class Service(object):
     def __init__(self, request_meta=None, response_meta=None, oneway=None, remark=None):

@@ -5,7 +5,7 @@ import json
 
 from ..variable_meta import VariableMeta
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class EventVariableMeta(VariableMeta):

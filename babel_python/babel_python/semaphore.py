@@ -6,7 +6,7 @@ try:
 except ImportError:
     from time import time as _time
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 """
 Add timeout for wait of the standard implementation.

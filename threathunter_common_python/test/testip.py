@@ -6,7 +6,7 @@ from threathunter_common.geo import threathunter_ip
 from threathunter_common.geo.ip import is_private_ip
 from threathunter_common.util import millis_now
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def test_ip_public():

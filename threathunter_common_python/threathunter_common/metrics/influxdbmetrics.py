@@ -9,7 +9,7 @@ from influxdb import InfluxDBClient as InfluxDBClientNew
 from threathunter_common.metrics.metrics import Metrics
 from threathunter_common.util import utf8
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class InfluxdbMetrics(Metrics):

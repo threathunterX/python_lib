@@ -6,7 +6,7 @@ from ..property import Property
 from ..variable_meta import VariableMeta
 from ..util import text
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 class SequenceValueVariableMeta(VariableMeta):
 

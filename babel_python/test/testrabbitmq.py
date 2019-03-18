@@ -3,7 +3,7 @@
 
 from babel_python.rabbitmq import *
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class TestRabbitmq:

@@ -7,7 +7,7 @@ from .property import Property
 from .util import text, unicode_list
 
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class PropertyCondition(object):

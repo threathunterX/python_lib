@@ -1,4 +1,4 @@
-__author__ = 'alberto'
+__author__ = "nebula"
 class DoesNotExist(Exception):
     pass
 

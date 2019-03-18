@@ -17,7 +17,7 @@ from ..util import unicode_dict
 from . import threathunter_identity_card
 from . import threathunter_mobile
 
-__author__ = 'lw'
+__author__ = "nebula"
 __all__ = ["get_ip_location", "get_ip_geo_data", "get_ip_cn_city", "get_ip_cn_province", "get_ip_cn_province_city",
            "get_phone_location",
            "get_phone_cn_city", "get_phone_cn_province", "get_phone_cn_province_city", "get_cities_in_china",

@@ -10,7 +10,7 @@ from .metricsagent import MetricsAgent
 from .redismetrics import RedisMetrics
 from ..util import millis_now
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 path_pattern = re.compile("/db/(.*?)/series")

@@ -4,7 +4,7 @@
 import redis
 from rediscluster import StrictRedisCluster
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class RedisCtx(object):

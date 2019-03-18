@@ -5,7 +5,7 @@ import hashlib
 
 from .kombu import KombuQueueSender,KombuQueueReceiver, KombuTwoLayerQueueReceiver
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 """

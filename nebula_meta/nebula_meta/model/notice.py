@@ -5,7 +5,7 @@ import json
 
 from ..util import text, unicode_obj
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 class Notice(object):
     def __init__(self, *args, **kwargs):

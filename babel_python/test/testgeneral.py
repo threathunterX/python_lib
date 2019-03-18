@@ -10,7 +10,7 @@ from babel_python.util import *
 from threathunter_common.event import Event
 
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def sleep(timeout):

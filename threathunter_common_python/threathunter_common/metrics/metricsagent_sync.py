@@ -18,7 +18,7 @@ from ..network import get_local_ip
 from ..util import millis_now, gen_uuid
 from ..util import run_in_thread, run_in_subprocess
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 logger = logging.getLogger()
 

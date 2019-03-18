@@ -10,7 +10,7 @@ from ..property_reduction import PropertyReduction
 
 from ..util import text
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class AggregateVariableMeta(VariableMeta):

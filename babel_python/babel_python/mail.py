@@ -6,7 +6,7 @@ import json, base64
 
 from .util import text, unicode_list, unicode_dict, binary_data
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class Mail(object):

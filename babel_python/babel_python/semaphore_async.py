@@ -4,7 +4,7 @@
 from gevent.timeout import Timeout
 import gevent.event as gevent_event
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 """
 Add timeout for wait of the standard implementation.

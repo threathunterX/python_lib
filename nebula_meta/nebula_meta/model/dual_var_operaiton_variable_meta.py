@@ -8,7 +8,7 @@ from ..variable_meta import VariableMeta
 from ..util import text, unicode_list
 from ..property_mapping import DirectPropertyMapping
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 class DualVarOperationVariableMeta(VariableMeta):
 

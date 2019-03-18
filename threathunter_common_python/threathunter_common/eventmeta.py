@@ -6,7 +6,7 @@ from property import *
 from util import *
 
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 event_meta_registry = dict()
 

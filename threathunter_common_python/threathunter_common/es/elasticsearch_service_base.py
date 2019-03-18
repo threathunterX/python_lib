@@ -7,7 +7,7 @@ import abc
 from .elasticsearch_conn import ESConnection
 from .elasticsearch_dao import ESDao
 
-__author__ = 'tsli'
+__author__ = "nebula"
 
 class BaseESService():
     """

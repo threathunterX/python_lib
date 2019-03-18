@@ -5,7 +5,7 @@ from __future__ import absolute_import
 from .redis_async import (RedisListSender, RedisListReceiver, RedisPubSubSender,
                           RedisPubSubReceiver, RedisMultipleListSender)
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 """

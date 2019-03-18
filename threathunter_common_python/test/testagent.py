@@ -5,7 +5,7 @@ from threathunter_common.util import millis_now
 import os
 import time
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def test_agent():

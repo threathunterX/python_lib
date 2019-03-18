@@ -11,7 +11,7 @@ from .mail import Mail
 from .mailutil import extract_data_from_mail, populate_data_into_mail
 from .util import gen_uuid
 
-__author__ = 'luwen'
+__author__ = "nebula"
 
 
 class ServiceServer(object):

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from babel_python.babelrabbitmq import get_hash
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class TestSharding:

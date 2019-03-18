@@ -6,7 +6,7 @@ import json
 
 from .util import text, unicode_list
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 class Property(object):
     def __init__(self, identifier, name, type):

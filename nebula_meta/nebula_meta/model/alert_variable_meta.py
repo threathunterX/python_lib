@@ -9,7 +9,7 @@ from ..variable_meta import VariableMeta
 from ..util import unicode_obj, text, unicode_list
 from ..property_mapping import ConstantPropertyMapping
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class AlertVariableMeta(VariableMeta):

@@ -6,7 +6,7 @@ import json
 
 from .property import Property
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class PropertyReduction(object):

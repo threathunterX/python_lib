@@ -6,7 +6,7 @@ import six, json
 from ..util import text, unicode_obj, unicode_list
 
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class Term(object):

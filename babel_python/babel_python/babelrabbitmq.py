@@ -6,7 +6,7 @@ import mmh3
 
 from .rabbitmq import PikaQueueSender, PikaQueueReceiver, PikaTwoLayerQueueReceiver
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 """

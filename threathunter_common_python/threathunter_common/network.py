@@ -7,7 +7,7 @@ if os.name != "nt":
     import struct
 
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def get_interface_ip(ifname):

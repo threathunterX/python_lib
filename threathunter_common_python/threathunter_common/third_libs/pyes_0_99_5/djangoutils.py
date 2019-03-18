@@ -8,7 +8,7 @@ import uuid
 from django.db import models
 
 
-__author__ = 'Alberto Paro'
+__author__ = "nebula"
 __all__ = ["get_values"]
 
 

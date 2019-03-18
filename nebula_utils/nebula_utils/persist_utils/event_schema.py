@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'yll'
+__author__ = "nebula"
 
 # 详细日志查询时,合并日志所需的event的固定字段
 

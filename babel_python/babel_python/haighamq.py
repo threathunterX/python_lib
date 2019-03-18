@@ -23,7 +23,7 @@ monkey.patch_all()
 from .util import gen_uuid
 from threathunter_common.rabbitmq.rmqctx import RabbitmqCtx
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 logger = logging.getLogger('babel_python.haigha')
 

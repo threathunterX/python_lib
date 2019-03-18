@@ -16,7 +16,7 @@ from .semaphore import CountDownLatch
 from threathunter_common.util import run_in_thread
 from threathunter_common.redis.redisctx import RedisCtx
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 def catch_error(func):
     """Catch errors of redis and do a second try"""

@@ -13,7 +13,7 @@ monkey.patch_all()
 from .semaphore_async import CountDownLatch
 from threathunter_common.redis.redisctx import RedisCtx
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 def catch_error(func):
     """Catch errors of redis and do a second try"""

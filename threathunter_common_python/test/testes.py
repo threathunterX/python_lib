@@ -5,7 +5,7 @@ from threathunter_common.util import curr_timestamp
 from threathunter_common.es.elasticsearch_service import ESServiceForHoneyPot
 
 
-__author__ = 'wxt'
+__author__ = "nebula"
 
 
 

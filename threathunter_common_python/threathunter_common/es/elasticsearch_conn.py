@@ -9,7 +9,7 @@ from ..third_libs.pyes_0_99_5 import ES
 
 logger = logging.getLogger('threathunter_common.es.conn')
 
-__author__ = 'tsli'
+__author__ = "nebula"
 
 class ESConnection():
     """

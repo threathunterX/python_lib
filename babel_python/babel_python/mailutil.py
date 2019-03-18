@@ -7,7 +7,7 @@ import json
 from .util import text
 from threathunter_common.event import Event
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def extract_data_from_mail(m):

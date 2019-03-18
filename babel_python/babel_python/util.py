@@ -11,7 +11,7 @@ import six
 import uuid
 from six import iteritems
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 md5string = lambda x: hashlib.md5(utf8(x)).hexdigest()
 

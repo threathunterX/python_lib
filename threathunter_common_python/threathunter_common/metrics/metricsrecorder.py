@@ -7,7 +7,7 @@ import atexit
 from ..util import millis_now
 from .metricsagent import MetricsAgent
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 # remove atomics
 # try:

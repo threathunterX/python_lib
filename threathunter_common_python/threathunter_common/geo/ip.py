@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import array
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 import os
 import socket

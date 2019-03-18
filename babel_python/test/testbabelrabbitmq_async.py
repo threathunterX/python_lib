@@ -20,7 +20,7 @@ import os
 os.environ.update({'KOMBU_LOG_CONNECTION': "True"})
 import logging
 logging.basicConfig(level=logging.DEBUG)
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def sleep(timeout):

@@ -4,7 +4,7 @@
 import json
 from threathunter_common.geo.geoutil import get_phone_geo_data,get_ip_cn_province_city,get_phone_cn_province_city,get_identity_card_cn_province_city,get_identity_card_geo_data,get_ip_geo_data
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def test_phone_numbers():

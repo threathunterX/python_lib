@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from threathunter_common.network import get_local_ip
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 def test_localip():

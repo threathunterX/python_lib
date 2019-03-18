@@ -13,7 +13,7 @@ from types import GeneratorType
 
 from .exceptions import BulkOperationException
 
-__author__ = 'alberto'
+__author__ = "nebula"
 
 class DotDict(dict):
     def __getattr__(self, attr):

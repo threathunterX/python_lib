@@ -9,7 +9,7 @@ from ..util import unicode_obj, unicode_list
 from ..property_condition import PropertyCondition
 from ..property_mapping import PropertyMapping, DirectPropertyMapping, VariableValuePropertyMapping
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 class VarCollectorVariableMeta(VariableMeta):
 

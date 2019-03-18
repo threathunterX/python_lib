@@ -3,7 +3,7 @@
 
 from babel_python.redis_async import *
 
-__author__ = 'lw'
+__author__ = "nebula"
 
 
 class TestRabbitmq:
